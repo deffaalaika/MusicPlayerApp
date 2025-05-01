@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627901680389",
+    "project_id": "musicplayerapp-ec461",
+    "storage_bucket": "musicplayerapp-ec461.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627901680389:android:6e871d0c8fc9b04200856c",
+        "android_client_info": {
+          "package_name": "com.deffa.musicplayerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi-z4dU2gqG7zu8jJgBZRhaHy64cMClME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

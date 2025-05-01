@@ -16,23 +16,38 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
+  desc "Build & distribute an APK to Firebase App Distribution"
+  lane :distribute do
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
+    variant = UI.select("Which build variant?", ["Debug", "Release"])
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+
+    notes = UI.input("Release notes (leave blank to skip):")
+
+
+    gradle(task: "clean")
+    gradle(
+      task: "assemble",
+      build_type: variant
+    )
+
+
+    artifact_path = if variant == "Release"
+      "app/build/outputs/apk/release/app-release-unsigned.apk"
+    else
+      "app/build/outputs/apk/debug/app-debug.apk"
+    end
+
+    # 5️⃣ Distribute
+    firebase_app_distribution(
+      app: "1:627901680389:android:6e871d0c8fc9b04200856c",
+      firebase_cli_token: "1//0g4wGBSB-VetTCgYIARAAGBASNwF-L9IrCJBnbaH9Oj0Z3-pgezCtjJ_QL-71iCTQquKBbrH6emrofnvTQS9cMSdKfa15adyCtjc",
+      android_artifact_path: artifact_path,
+      android_artifact_type: "APK",
+      groups: "bca-digital",
+      release_notes: notes.empty? ? nil : notes
+    )
+
+    UI.success("✅ Uploaded #{variant} build with#{notes.empty? ? " no" : ""} release notes!")
   end
 end

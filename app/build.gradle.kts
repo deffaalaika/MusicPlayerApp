@@ -44,6 +44,8 @@ android {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
 
+    implementation(libs.koin.android)
+
     // Unit testing
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.2")

@@ -8,7 +8,7 @@ import retrofit2.Response
 
 
 class TrackRepositoryImpl(
-    private val api: ItunesApiService = NetworkModule.itunesApiService
+    private val api: ItunesApiService
 ) : TrackRepository {
 
     override suspend fun searchTracks(term: String): Resource<List<Track>> {

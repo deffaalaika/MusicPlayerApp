@@ -1,7 +1,6 @@
 package com.deffa.musicplayerapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.deffa.musicplayerapp.data.TrackRepositoryImpl
 import com.deffa.musicplayerapp.domain.SearchTrackUseCase
 import com.deffa.musicplayerapp.utils.Resource
 import com.deffa.searchmodule.Track
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class MainViewModel(
-    private val searchTrackUseCase: SearchTrackUseCase = SearchTrackUseCase(TrackRepositoryImpl())
+    private val searchTrackUseCase: SearchTrackUseCase
 ) : ViewModel() {
     private val _tracks = MutableStateFlow<List<Track>>(emptyList())
     val tracks: StateFlow<List<Track>> = _tracks

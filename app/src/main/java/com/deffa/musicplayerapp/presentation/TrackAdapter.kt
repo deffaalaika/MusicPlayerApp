@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.deffa.musicplayerapp.R
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.databinding.ItemTrackBinding
+import com.deffa.searchmodule.Track
 
 class TrackAdapter(
     private var tracks: List<Track>,

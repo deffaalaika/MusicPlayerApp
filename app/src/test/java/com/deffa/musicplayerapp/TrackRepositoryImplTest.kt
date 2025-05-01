@@ -3,8 +3,8 @@ package com.deffa.musicplayerapp
 import com.deffa.musicplayerapp.data.ItunesApiService
 import com.deffa.musicplayerapp.data.TrackRepositoryImpl
 import com.deffa.musicplayerapp.data.remote.SearchResponse
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.utils.Resource
+import com.deffa.searchmodule.Track
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking

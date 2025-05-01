@@ -1,55 +1,68 @@
 package com.deffa.musicplayerapp.presentation
 
-import android.media.AudioManager
-import android.media.MediaPlayer
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.databinding.ActivityMainBinding
+import com.deffa.searchmodule.MusicActivity
+import com.deffa.searchmodule.Track
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+
+    companion object {
+        private const val REQUEST_RECORD_AUDIO = 42
+    }
+
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var adapter: TrackAdapter
     private var currentTracks: List<Track> = emptyList()
-    private var currentIndex: Int = -1
-    private var player: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = TrackAdapter(emptyList()) { pos -> playAt(pos) }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUEST_RECORD_AUDIO
+            )
+        } else {
+            initUI()
+        }
+
+    }
+
+    private fun initUI() {
+        adapter = TrackAdapter(emptyList()) { position ->
+            launchPlayer(position)
+        }
         binding.rvItem.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = this@MainActivity.adapter
         }
 
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             viewModel.tracks.collectLatest { list ->
                 currentTracks = list
                 adapter.update(list)
-                releasePlayer()
-                currentIndex = -1
-                updateControls()
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.errorMessage.collectLatest { msg ->
-                msg?.let {
-                    Toast.makeText(this@MainActivity, it, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
         binding.searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -60,68 +73,30 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String) = false
         })
-
-        binding.btnPlayPause.setOnClickListener { togglePlayPause() }
-        binding.btnPrev.setOnClickListener { playAt(currentIndex - 1) }
-        binding.btnNext.setOnClickListener { playAt(currentIndex + 1) }
-
-        updateControls()
     }
 
-    private fun playAt(index: Int) {
-        if (index !in currentTracks.indices) return
-        val url = currentTracks[index].previewUrl
-        if (url.isNullOrEmpty()) {
-            Toast.makeText(this, "No preview available", Toast.LENGTH_SHORT).show()
-            return
-        }
-        releasePlayer()
-        player = MediaPlayer().apply {
-            setAudioStreamType(AudioManager.STREAM_MUSIC)
-            setDataSource(url)
-            setOnPreparedListener {
-                it.start()
-                binding.btnPlayPause.setImageResource(android.R.drawable.ic_media_pause)
-            }
-            setOnCompletionListener {
-                binding.btnPlayPause.setImageResource(android.R.drawable.ic_media_play)
-            }
-            prepareAsync()
-        }
-        currentIndex = index
-        updateControls()
-    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-    private fun togglePlayPause() {
-        player?.let {
-            if (it.isPlaying) {
-                it.pause()
-                binding.btnPlayPause.setImageResource(android.R.drawable.ic_media_play)
-            } else {
-                it.start()
-                binding.btnPlayPause.setImageResource(android.R.drawable.ic_media_pause)
-            }
+        if (requestCode == REQUEST_RECORD_AUDIO && grantResults.getOrNull(0) != PackageManager.PERMISSION_GRANTED) {
+            finishAffinity()
+        } else {
+            initUI()
         }
     }
 
-    private fun updateControls() {
-        binding.btnPrev.isEnabled = currentIndex > 0
-        binding.btnNext.isEnabled = currentIndex in 0 until currentTracks.size - 1
-        binding.btnPlayPause.isEnabled = currentIndex >= 0
-    }
-
-    private fun releasePlayer() {
-        player?.run {
-            if (isPlaying) stop()
-            reset()
-            release()
+    private fun launchPlayer(index: Int) {
+        val intent = Intent(this, MusicActivity::class.java).apply {
+            putParcelableArrayListExtra(
+                MusicActivity.EXTRA_TRACKS,
+                ArrayList(currentTracks)
+            )
+            putExtra(MusicActivity.EXTRA_INDEX, index)
         }
-        player = null
-        binding.btnPlayPause.setImageResource(android.R.drawable.ic_media_play)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        releasePlayer()
+        startActivity(intent)
     }
 }

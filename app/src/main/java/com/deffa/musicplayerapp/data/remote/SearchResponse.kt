@@ -1,5 +1,6 @@
 package com.deffa.musicplayerapp.data.remote
 
+import com.deffa.searchmodule.Track
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

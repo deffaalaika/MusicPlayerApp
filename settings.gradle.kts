@@ -16,6 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/deffaalaika/MusicPlayerSearch")
+            credentials {
+                username = "deffaalaika"
+                password = "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"
+            }
+        }
     }
 }
 

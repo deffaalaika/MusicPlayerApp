@@ -1,9 +1,9 @@
 package com.deffa.musicplayerapp.data
 
 import com.deffa.musicplayerapp.data.remote.SearchResponse
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.domain.TrackRepository
 import com.deffa.musicplayerapp.utils.Resource
+import com.deffa.searchmodule.Track
 import retrofit2.Response
 
 

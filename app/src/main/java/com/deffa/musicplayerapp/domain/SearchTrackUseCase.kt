@@ -1,7 +1,7 @@
 package com.deffa.musicplayerapp.domain
 
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.utils.Resource
+import com.deffa.searchmodule.Track
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

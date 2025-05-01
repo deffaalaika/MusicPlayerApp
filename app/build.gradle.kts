@@ -57,11 +57,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("com.google.android.material:material:1.6.1")
     implementation("com.squareup.moshi:moshi:1.15.0")
-    // Moshi Kotlin module (adds Kotlin adapter factories)
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    // (optional, but recommended) generate adapters at compile time
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
-// optional, for loading artwork images:
     implementation("io.coil-kt:coil:2.0.0")
 
     implementation(libs.androidx.core.ktx)
@@ -72,4 +69,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation("com.deffa.searchmodule:searchmodule:1.0.6")
 }

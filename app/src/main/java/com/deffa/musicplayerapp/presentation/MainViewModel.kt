@@ -2,9 +2,9 @@ package com.deffa.musicplayerapp.presentation
 
 import androidx.lifecycle.ViewModel
 import com.deffa.musicplayerapp.data.TrackRepositoryImpl
-import com.deffa.musicplayerapp.data.remote.Track
 import com.deffa.musicplayerapp.domain.SearchTrackUseCase
 import com.deffa.musicplayerapp.utils.Resource
+import com.deffa.searchmodule.Track
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -31,6 +31,7 @@ class MainViewModel(
                 is Resource.Success -> {
 
                     _tracks.value = resource.data
+
                 }
 
                 Resource.Empty -> {

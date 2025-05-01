@@ -6,11 +6,21 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="Search songs…" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:paddingTop="8dp"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvItem"
@@ -18,6 +28,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingTop="8dp"
+        android:visibility="gone"
         tools:itemCount="4"
         tools:listitem="@layout/item_track" />
 

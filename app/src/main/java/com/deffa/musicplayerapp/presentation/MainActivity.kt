@@ -4,15 +4,21 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.deffa.musicplayerapp.databinding.ActivityMainBinding
 import com.deffa.searchmodule.MusicActivity
 import com.deffa.searchmodule.Track
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -56,10 +62,33 @@ class MainActivity : AppCompatActivity() {
             adapter = this@MainActivity.adapter
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.tracks.collectLatest { list ->
-                currentTracks = list
-                adapter.update(list)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                launch {
+                    viewModel.tracks.collectLatest { list ->
+                        currentTracks = list
+                        adapter.update(list)
+                    }
+                }
+
+                launch {
+                    viewModel.isLoading.collectLatest { value ->
+                        if (value) {
+                            binding.progressBar.visibility = VISIBLE
+                            binding.rvItem.visibility = GONE
+                        } else {
+                            binding.progressBar.visibility = GONE
+                            binding.rvItem.visibility = VISIBLE
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.errorMessage.collectLatest { value ->
+                        Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 

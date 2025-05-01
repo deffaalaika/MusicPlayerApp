@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -84,11 +83,16 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                launch {
-                    viewModel.errorMessage.collectLatest { value ->
-                        Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
-                    }
-                }
+
+                //TODO: crashed
+//                launch {
+//                    viewModel.errorMessage.collectLatest { value ->
+//                        if (!value.isNullOrEmpty()) {
+//
+//                            Toast.makeText(applicationContext, value, Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
             }
         }
 

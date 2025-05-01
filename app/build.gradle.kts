@@ -74,5 +74,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.deffa.searchmodule:searchmodule:1.0.6")
+    implementation(libs.searchmodule)
 }

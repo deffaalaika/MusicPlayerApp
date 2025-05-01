@@ -10,6 +10,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.8.0"
 constraintlayout = "2.2.1"
+searchmodule = "1.0.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,6 +23,7 @@ koin-androidx-viewmodel = { module = "io.insert-koin:koin-androidx-viewmodel", v
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+searchmodule = { module = "com.deffa.searchmodule:searchmodule", version.ref = "searchmodule" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

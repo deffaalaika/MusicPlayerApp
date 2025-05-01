@@ -38,6 +38,11 @@ android {
 
 dependencies {
 
+    // Unit testing
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")

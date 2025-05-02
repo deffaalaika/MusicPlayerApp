@@ -1,3 +1,18 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+// Load the local.properties file
+val localProperties = Properties()
+val localPropertiesFile = file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
+val localUsername = localProperties["username"]?.toString()
+val localPassword = localProperties["password"]?.toString()
+
+
 pluginManagement {
     repositories {
         google {
@@ -19,8 +34,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/deffaalaika/MusicPlayerSearch")
             credentials {
-                username = "deffaalaika"
-                password = "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"
+                username = localUsername
+                password = localPassword
             }
         }
     }

@@ -85,11 +85,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
 
-                //TODO: crashed
                 launch {
                     viewModel.errorMessage.collectLatest { value ->
                         Toast.makeText(this@MainActivity, value, Toast.LENGTH_SHORT).show()
-
                     }
                 }
             }

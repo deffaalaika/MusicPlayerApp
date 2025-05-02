@@ -1,11 +1,15 @@
 package com.deffa.musicplayerapp.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.deffa.musicplayerapp.domain.SearchTrackUseCase
 import com.deffa.musicplayerapp.utils.Resource
 import com.deffa.searchmodule.Track
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val searchTrackUseCase: SearchTrackUseCase
@@ -16,32 +20,32 @@ class MainViewModel(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
+    private val _errorMessage = MutableSharedFlow<String>(replay = 0)
+    val errorMessage: SharedFlow<String> = _errorMessage
 
 
     fun search(term: String) {
-        _isLoading.value = true
+        viewModelScope.launch {
+            _isLoading.value = true
 
-        searchTrackUseCase.execute(term) { resource ->
-            _isLoading.value = false
+            searchTrackUseCase.execute(term) { resource ->
+                _isLoading.value = false
 
-            when (resource) {
-                is Resource.Success -> {
+                when (resource) {
+                    Resource.Empty -> {
+                        _tracks.value = emptyList()
+                    }
 
-                    _tracks.value = resource.data
+                    is Resource.Success -> {
+                        _tracks.value = resource.data
+                    }
 
-                }
-
-                Resource.Empty -> {
-                    _tracks.value = emptyList()
-
-                }
-
-                is Resource.Error -> {
-                    _tracks.value = emptyList()
-                    _errorMessage.value = "${resource.code} - ${resource.message}"
-
+                    is Resource.Error -> {
+                        _tracks.value = emptyList()
+                        viewModelScope.launch {
+                            _errorMessage.emit("${resource.code} – ${resource.message}")
+                        }
+                    }
                 }
             }
         }
